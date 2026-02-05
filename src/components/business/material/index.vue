@@ -52,13 +52,13 @@
             全部
           </div>
           <div
-            v-for="cate in cateList"
+            v-for="cate in flatCateList"
             :key="cate.id"
             class="cate-item"
             :class="{ active: currentCid === cate.id }"
             @click="handleCateClick(cate.id)"
           >
-            {{ cate.name }}
+            {{ cate.depth > 0 ? `${'—'.repeat(cate.depth)} ${cate.name}` : cate.name }}
           </div>
         </div>
 
@@ -171,6 +171,21 @@ const userStore = useUserStore()
 const dialogVisible = ref(false)
 const loading = ref(false)
 const cateList = ref<FileCate[]>([])
+
+const flatCateList = computed(() => {
+  const result: Array<FileCate & { depth: number }> = []
+  const walk = (nodes: FileCate[], depth: number) => {
+    nodes.forEach((n) => {
+      result.push({ ...(n as any), depth })
+      if (Array.isArray(n.children) && n.children.length) {
+        walk(n.children, depth + 1)
+      }
+    })
+  }
+  walk(cateList.value || [], 0)
+  return result
+})
+
 const fileList = ref<FileInfo[]>([])
 const currentCid = ref(0)
 const tempSelected = ref<string[]>([])

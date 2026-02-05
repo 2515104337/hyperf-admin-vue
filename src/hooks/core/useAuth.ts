@@ -77,8 +77,8 @@ export const useAuth = () => {
       return frontendAuthList.includes(auth)
     }
 
-    // 后端模式
-    return backendAuthList.some((item) => item?.authMark === auth)
+    // 后端模式：优先使用后端返回的 buttons（全局权限码），同时兼容路由 meta.authList
+    return frontendAuthList.includes(auth) || backendAuthList.some((item) => item?.authMark === auth)
   }
 
   return {

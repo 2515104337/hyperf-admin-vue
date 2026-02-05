@@ -252,7 +252,7 @@
     const keys: number[] = []
     const traverse = (nodeList: MenuNode[]): void => {
       nodeList.forEach((node) => {
-        if (node.id) keys.push(node.id as number)
+        if (typeof node.id === 'number') keys.push(node.id)
         if (node.children?.length) traverse(node.children)
       })
     }

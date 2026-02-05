@@ -315,10 +315,11 @@
       form.isFullPage = row.meta?.isFullPage ?? false
     } else {
       const row = props.editData
-      form.authName = row.title || ''
-      form.authLabel = row.authMark || ''
+      form.id = row.id || 0
+      form.authName = row.meta?.title || row.title || ''
+      form.authLabel = row.meta?.authMark || row.authMark || ''
       form.authIcon = row.icon || ''
-      form.authSort = row.sort || 1
+      form.authSort = row.meta?.sort || row.sort || 1
     }
   }
 

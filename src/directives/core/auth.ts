@@ -51,11 +51,14 @@ function checkAuthPermission(el: HTMLElement, binding: AuthBinding): void {
     return
   }
 
-  // 获取当前路由的权限列表
+  // 后端返回的按钮权限列表（全局权限码）
+  const buttons = userStore.info?.buttons || []
+
+  // 获取当前路由的权限列表（兼容 meta.authList 模式）
   const authList = (router.currentRoute.value.meta.authList as Array<{ authMark: string }>) || []
 
   // 检查是否有对应的权限标识
-  const hasPermission = authList.some((item) => item.authMark === binding.value)
+  const hasPermission = buttons.includes(binding.value) || authList.some((item) => item.authMark === binding.value)
 
   // 如果没有权限，移除元素
   if (!hasPermission) {

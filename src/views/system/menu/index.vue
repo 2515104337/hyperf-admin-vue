@@ -324,12 +324,14 @@
 
       if (item.meta?.authList?.length) {
         const authChildren: AppRouteRecord[] = item.meta.authList.map(
-          (auth: { title: string; authMark: string }) => ({
+          (auth: { id: number; title: string; authMark: string; sort?: number }) => ({
+            id: auth.id,
             path: `${item.path}_auth_${auth.authMark}`,
             name: `${String(item.name)}_auth_${auth.authMark}`,
             meta: {
               title: auth.title,
               authMark: auth.authMark,
+              sort: auth.sort ?? 1,
               isAuthButton: true,
               parentPath: item.path
             }
@@ -426,10 +428,8 @@
    */
   const handleEditAuth = (row: AppRouteRecord): void => {
     dialogType.value = 'button'
-    editData.value = {
-      title: row.meta?.title,
-      authMark: row.meta?.authMark
-    }
+    // 直接传入按钮节点（包含 id/meta/authMark/sort），menu-dialog 会自动回填
+    editData.value = row
     parentMenuId.value = null
     lockMenuType.value = false
     dialogVisible.value = true
@@ -508,7 +508,7 @@
         cancelButtonText: '取消',
         type: 'warning'
       })
-      // 权限按钮的 id 格式为 "parentId_authMark"，需要从原始数据中查找
+      // 按钮权限节点使用后端真实菜单 ID（number）
       if (row.id && typeof row.id === 'number') {
         await fetchDeleteMenu(row.id)
         ElMessage.success('删除成功')

@@ -50,6 +50,7 @@ export interface RouteMeta extends Record<string | number | symbol, unknown> {
     id?: number
     title: string
     authMark: string
+    sort?: number
   }>
   /** 是否为一级菜单 */
   isFirstLevel?: boolean
