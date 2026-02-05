@@ -1,18 +1,30 @@
 import request from '@/utils/http'
 
-// 存储引擎类型
+/** 存储引擎列表项（对齐后端 /api/setting/storage/list） */
 export interface StorageEngine {
+  /** 引擎 key：local/aliyun/qiniu/qcloud */
+  key: string
+  /** 显示名称 */
   name: string
-  engine: string
+  /** 描述 */
+  desc: string
+  /** 是否为默认引擎：1=启用 0=未启用 */
   status: number
-  describe: string
 }
 
-// 存储引擎配置详情
+/** 存储引擎配置字段（对齐后端 /api/setting/storage/detail） */
+export interface StorageField {
+  key: string
+  name: string
+  type: 'text' | 'password'
+  placeholder?: string
+  value?: string
+}
+
+/** 存储引擎配置详情 */
 export interface StorageDetail {
   engine: string
-  status: number
-  config: Record<string, any>
+  fields: StorageField[]
 }
 
 // 获取存储引擎列表

@@ -13,7 +13,7 @@
             />
             <div class="text-xs text-gray-400 mt-2">点击更换头像</div>
           </div>
-          <h2 class="mt-3 text-xl font-normal">{{ userInfo.userName }}</h2>
+          <h2 class="mt-3 text-xl font-normal">{{ userInfo.username }}</h2>
           <p class="mt-5 text-sm">{{ form.des || '暂无个人介绍' }}</p>
 
           <div class="w-75 mx-auto mt-7.5 text-left">
@@ -183,7 +183,7 @@
     email: '',
     mobile: '',
     address: '',
-    sex: '0',
+    sex: 'unknown',
     des: ''
   })
 
@@ -218,9 +218,9 @@
    * 性别选项
    */
   const options = [
-    { value: '0', label: '未知' },
-    { value: '1', label: '男' },
-    { value: '2', label: '女' }
+    { value: 'unknown', label: '未知' },
+    { value: 'male', label: '男' },
+    { value: 'female', label: '女' }
   ]
 
   onMounted(() => {
@@ -264,8 +264,16 @@
    */
   const fetchProfile = async () => {
     try {
-      const data = await request.get<typeof form>({ url: '/api/user/profile' })
-      Object.assign(form, data)
+      const data = await request.get<any>({ url: '/api/user/profile' })
+      Object.assign(form, {
+        realName: data?.real_name || '',
+        nikeName: data?.nickname || '',
+        email: data?.email || '',
+        mobile: data?.phone || '',
+        address: data?.address || '',
+        sex: data?.gender || 'unknown',
+        des: data?.description || ''
+      })
     } catch (error) {
       console.error('获取用户资料失败:', error)
     }
@@ -279,7 +287,18 @@
       // 保存
       try {
         saving.value = true
-        await request.put({ url: '/api/user/profile', params: form })
+        await request.put({
+          url: '/api/user/profile',
+          params: {
+            real_name: form.realName,
+            nickname: form.nikeName,
+            email: form.email,
+            phone: form.mobile,
+            address: form.address,
+            gender: form.sex,
+            description: form.des
+          }
+        })
         ElMessage.success('保存成功')
         isEdit.value = false
       } catch (error: any) {

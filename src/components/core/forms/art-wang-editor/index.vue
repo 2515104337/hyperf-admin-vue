@@ -73,7 +73,7 @@
   // 计算属性：上传服务器地址
   const uploadServer = computed(
     () =>
-      props.uploadConfig?.server || `${import.meta.env.VITE_API_URL}/api/common/upload/wangeditor`
+      props.uploadConfig?.server || '/api/upload/image'
   )
 
   // 合并上传配置
@@ -116,6 +116,16 @@
         server: uploadServer.value,
         headers: {
           Authorization: userStore.accessToken
+        },
+        customInsert(res: any, insertFn: any) {
+          // 后端统一响应：{ code, msg, data: { url, name, ... } }
+          const url = res?.data?.url
+          if (res?.code === 200 && url) {
+            insertFn(url, res?.data?.name || '', url)
+            return
+          }
+          console.error('[WangEditor] Upload response:', res)
+          ElMessage.error(res?.msg || `图片上传失败 ${EmojiText[500]}`)
         },
         onSuccess() {
           ElMessage.success(`图片上传成功 ${EmojiText[200]}`)

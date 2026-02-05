@@ -30,7 +30,7 @@
       <ElFormItem label="状态" prop="status">
         <ElSelect v-model="formData.status">
           <ElOption label="启用" value="1" />
-          <ElOption label="禁用" value="0" />
+          <ElOption label="禁用" value="2" />
         </ElSelect>
       </ElFormItem>
       <ElFormItem label="角色" prop="roles">

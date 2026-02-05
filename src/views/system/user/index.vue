@@ -78,7 +78,7 @@
   // 用户状态配置
   const USER_STATUS_CONFIG = {
     '1': { type: 'success' as const, text: '启用' },
-    '0': { type: 'danger' as const, text: '禁用' }
+    '2': { type: 'danger' as const, text: '禁用' }
   } as const
 
   /**
