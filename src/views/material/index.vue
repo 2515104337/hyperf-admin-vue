@@ -29,7 +29,7 @@
             <div class="tree-node">
               <el-icon class="folder-icon"><Folder /></el-icon>
               <span class="node-label">{{ node.label }}</span>
-              <span class="node-actions" @click.stop>
+              <span v-if="data.id !== 0" class="node-actions" @click.stop>
                 <el-dropdown trigger="click">
                   <el-icon><MoreFilled /></el-icon>
                   <template #dropdown>
@@ -127,10 +127,10 @@
                   preview-teleported
                   @click.stop
                 />
-                <div v-else-if="activeTab === FileType.VIDEO" class="video-preview">
+                <div v-else-if="activeTab === FileType.VIDEO" class="video-preview" @click.stop="handlePreview(file)">
                   <el-icon size="40"><VideoPlay /></el-icon>
                 </div>
-                <div v-else class="file-icon">
+                <div v-else class="file-icon" @click.stop="handlePreview(file)">
                   <el-icon size="40"><Document /></el-icon>
                 </div>
                 <div class="select-checkbox" @click.stop>
@@ -148,6 +148,9 @@
                   </el-tooltip>
                   <el-tooltip content="复制地址" placement="top">
                     <el-icon @click="handleCopyUrl(file)"><Link /></el-icon>
+                  </el-tooltip>
+                  <el-tooltip content="删除" placement="top">
+                    <el-icon @click="handleDeleteFile(file)"><Delete /></el-icon>
                   </el-tooltip>
                 </div>
               </div>
@@ -424,7 +427,9 @@ const acceptTypes = computed(() => {
 // 获取分类列表
 const getCateList = async () => {
   try {
-    cateList.value = await fetchFileCateList(activeTab.value)
+    const list = await fetchFileCateList(activeTab.value)
+    // 在前面添加"全部文件"虚拟节点
+    cateList.value = [{ id: 0, pid: 0, type: activeTab.value, name: '全部文件' } as FileCate, ...list]
   } catch (e) {
     console.error(e)
   }
@@ -823,6 +828,11 @@ onMounted(() => {
             align-items: center;
             justify-content: center;
             color: var(--el-text-color-secondary);
+            cursor: pointer;
+
+            &:hover {
+              color: var(--el-color-primary);
+            }
           }
 
           .select-checkbox {
