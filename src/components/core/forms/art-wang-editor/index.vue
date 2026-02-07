@@ -115,7 +115,7 @@
         allowedFileTypes: mergedUploadConfig.value.allowedFileTypes,
         server: uploadServer.value,
         headers: {
-          Authorization: userStore.accessToken
+          Authorization: `Bearer ${userStore.accessToken}`
         },
         customInsert(res: any, insertFn: any) {
           // 后端统一响应：{ code, msg, data: { url, name, ... } }

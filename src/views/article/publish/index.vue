@@ -114,7 +114,7 @@
   const { accessToken } = userStore
 
   const uploadImageUrl = '/api/upload/image'
-  const uploadHeaders = { Authorization: accessToken }
+  const uploadHeaders = { Authorization: `Bearer ${accessToken}` }
 
   const pageMode = ref<PageModeEnum>(PageModeEnum.Add)
   const articleName = ref('')

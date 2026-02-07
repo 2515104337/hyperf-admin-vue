@@ -412,7 +412,7 @@ const uploadUrl = computed(() => {
 })
 
 const uploadHeaders = computed(() => ({
-  Authorization: userStore.accessToken
+  Authorization: `Bearer ${userStore.accessToken}`
 }))
 
 const acceptTypes = computed(() => {
